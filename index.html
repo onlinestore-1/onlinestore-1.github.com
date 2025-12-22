@@ -175,6 +175,16 @@ const products=[
 const productList=document.getElementById("productList");
 const likeList=document.getElementById("likeList");
 
+  
+function openMenu(){
+ document.getElementById("drawer").style.left="0";
+ document.querySelector(".overlay").style.display="block";
+}
+function closeMenu(){
+ document.getElementById("drawer").style.left="-260px";
+ document.querySelector(".overlay").style.display="none";
+}
+
 function showProducts(list){
  if(productList){
   productList.innerHTML="";
