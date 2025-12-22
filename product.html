@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <title>Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<link rel="stylesheet" href="css/style.css">
+<style>
+body{font-family:Arial;background:#f4f4f4}
+.box{background:#fff;margin:10px;padding:15px;border-radius:8px}
+img{width:100%;border-radius:8px}
+button,input{width:100%;padding:10px;margin-top:10px}
+</style>
 </head>
+
 <body>
 
-<div id="productDetails"></div>
+<div id="product" class="box"></div>
 
-<h3>You Might Also Like</h3>
-<div id="related" class="product-grid"></div>
+<script>
+const products=[
+{id:1,name:"Men T-shirt",price:12,img:"https://via.placeholder.com/200",desc:"Soft cotton t-shirt"},
+{id:2,name:"Ladies Dress",price:22,img:"https://via.placeholder.com/200",desc:"Elegant ladies dress"}
+];
 
-<script src="js/script.js"></script>
+const p=products.find(x=>x.id==localStorage.getItem("pid"));
+
+document.getElementById("product").innerHTML=`
+<img src="${p.img}">
+<h2>${p.name}</h2>
+<p>${p.desc}</p>
+<p>$${p.price}</p>
+<input type="number" id="qty" value="1" min="1">
+<button onclick="addToCart()">Add to Cart</button>
+<button onclick="buyNow()">Buy Now</button>
+`;
+
+function addToCart(){
+ let cart=JSON.parse(localStorage.getItem("cart"))||[];
+ cart.push({...p,qty:qty.value});
+ localStorage.setItem("cart",JSON.stringify(cart));
+ alert("Added to cart");
+}
+
+function buyNow(){
+ localStorage.setItem("order",JSON.stringify({...p,qty:qty.value}));
+ location.href="checkout.html";
+}
+</script>
+
 </body>
 </html>
