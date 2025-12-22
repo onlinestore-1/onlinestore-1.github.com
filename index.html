@@ -62,11 +62,26 @@ button{
 <body>
 
 <header>
-  <span onclick="openMenu()">☰</span>
-  <input type="text" placeholder="Search products" onkeyup="searchProduct(this.value)">
-  <a href="login.html">Login</a>
+  <header class="topbar">
+  <span class="menu-btn" onclick="openMenu()">☰</span>
+  <input type="text" placeholder="Search products..." onkeyup="search(this.value)">
 </header>
 
+<div id="drawer" class="drawer">
+  <div class="drawer-header">Login & Signup</div>
+
+  <a href="#">SuperCoin Zone</a>
+  <a href="#">All Categories</a>
+  <a href="orders.html">My Orders</a>
+  <a href="cart.html">My Cart</a>
+  <a href="#">My Wishlist</a>
+  <a href="#">My Account</a>
+  <a href="#">Help Centre</a>
+  <a href="#">Legal</a>
+</div>
+
+<div class="overlay" onclick="closeMenu()"></div>
+  
 <!-- HAMBURGER MENU -->
 <div id="menu" class="menu">
   <span onclick="closeMenu()">✖</span>
