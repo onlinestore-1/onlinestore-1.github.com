@@ -1,51 +1,138 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8">
 <title>Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <style>
-body{font-family:Arial;background:#f4f4f4}
-.box{background:#fff;margin:10px;padding:15px;border-radius:8px}
-img{width:100%;border-radius:8px}
-button,input{width:100%;padding:10px;margin-top:10px}
+ body{margin:0;font-family:Arial;background:#f1f3f6}
+
+header{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  background:#2874f0;
+  color:white;
+}
+header input{flex:1;padding:6px}
+
+.menu{
+  position:fixed;
+  top:0;left:-250px;
+  width:250px;height:100%;
+  background:white;
+  padding:10px;
+  transition:0.3s;
+}
+
+.ads{width:100%;height:180px;object-fit:cover}
+
+.categories{
+  display:flex;
+  overflow-x:auto;
+  background:white;
+}
+.categories div{
+  min-width:100px;
+  text-align:center;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:10px;
+}
+
+.product{
+  background:white;
+  padding:10px;
+}
+.product img{width:100%}
+
+button{
+  background:#ff9f00;
+  border:none;
+  padding:8px;
+  width:100%;
+}
 </style>
 </head>
-
 <body>
 
-<div id="product" class="box"></div>
+<div id="productDetails"></div>
+
+<h3>You Might Also Like</h3>
+<div id="related" class="product-grid"></div>
 
 <script>
-const products=[
-{id:1,name:"Men T-shirt",price:12,img:"https://via.placeholder.com/200",desc:"Soft cotton t-shirt"},
-{id:2,name:"Ladies Dress",price:22,img:"https://via.placeholder.com/200",desc:"Elegant ladies dress"}
+ const products=[
+ {id:1,name:"Men T-shirt",price:12,category:"Men",
+ img:"https://via.placeholder.com/200",desc:"Comfortable cotton T-shirt"},
+ {id:2,name:"Ladies Dress",price:22,category:"Women",
+ img:"https://via.placeholder.com/200",desc:"Stylish ladies dress"}
 ];
 
-const p=products.find(x=>x.id==localStorage.getItem("pid"));
+const productList=document.getElementById("productList");
+const likeList=document.getElementById("likeList");
 
-document.getElementById("product").innerHTML=`
-<img src="${p.img}">
-<h2>${p.name}</h2>
-<p>${p.desc}</p>
-<p>$${p.price}</p>
-<input type="number" id="qty" value="1" min="1">
-<button onclick="addToCart()">Add to Cart</button>
-<button onclick="buyNow()">Buy Now</button>
-`;
-
-function addToCart(){
- let cart=JSON.parse(localStorage.getItem("cart"))||[];
- cart.push({...p,qty:qty.value});
- localStorage.setItem("cart",JSON.stringify(cart));
- alert("Added to cart");
+function showProducts(list){
+ if(productList){
+  productList.innerHTML="";
+  likeList.innerHTML="";
+  list.forEach(p=>{
+   let html=`
+   <div class="product" onclick="openProduct(${p.id})">
+     <img src="${p.img}">
+     <h4>${p.name}</h4>
+     <p>$${p.price}</p>
+     <button>Buy Now</button>
+   </div>`;
+   productList.innerHTML+=html;
+   likeList.innerHTML+=html;
+  });
+ }
 }
 
-function buyNow(){
- localStorage.setItem("order",JSON.stringify({...p,qty:qty.value}));
- location.href="checkout.html";
+showProducts(products);
+
+function filterCategory(cat){
+ showProducts(products.filter(p=>p.category===cat));
 }
+
+function searchProduct(q){
+ showProducts(products.filter(p=>p.name.toLowerCase().includes(q.toLowerCase())));
+}
+
+function openProduct(id){
+ localStorage.setItem("product",JSON.stringify(products.find(p=>p.id===id)));
+ location.href="product.html";
+}
+
+if(document.getElementById("productDetails")){
+ let p=JSON.parse(localStorage.getItem("product"));
+ document.getElementById("productDetails").innerHTML=`
+   <img src="${p.img}">
+   <h2>${p.name}</h2>
+   <p>${p.desc}</p>
+   <input type="number" value="1" min="1">
+   <button onclick="location.href='checkout.html'">Buy Now</button>
+ `;
+}
+
+function openMenu(){menu.style.left="0"}
+function closeMenu(){menu.style.left="-250px"}
+
+const ads=[
+ "https://via.placeholder.com/800x300?text=SALE+1",
+ "https://via.placeholder.com/800x300?text=SALE+2"
+];
+let i=0;
+setInterval(()=>{
+ let img=document.getElementById("ads");
+ if(img) img.src=ads[i++%ads.length];
+},3000);
 </script>
-
 </body>
 </html>
